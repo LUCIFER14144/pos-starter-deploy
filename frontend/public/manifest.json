@@ -1,0 +1,8 @@
+{
+  "short_name": "POS",
+  "name": "POS PWA Starter",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "description": "Billing + Inventory + Negotiation POS"
+}

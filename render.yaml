@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: pos-backend
+    env: docker
+    dockerfilePath: backend/Dockerfile
+    plan: free
+    regions: ["oregon"]
+    envVars:
+      - key: SECRET_KEY
+        scope: all
+      - key: DEBUG
+        scope: all
+      - key: ALLOWED_HOSTS
+        scope: all
+      - key: DATABASE_URL
+        scope: all
+      - key: MANAGER_PIN
+        scope: all
+      - key: CORS_ALLOWED_ORIGINS
+        scope: all
+  - type: static
+    name: pos-frontend
+    staticPublishPath: frontend/build
+    env: static
+    plan: free
