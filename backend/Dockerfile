@@ -1,20 +1,31 @@
 # Official Python runtime as a parent image
 FROM python:3.11-slim
 
-# set workdir
+# Set environment variables
+ENV PYTHONUNBUFFERED=1
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PORT=8000
+
+# Install system dependencies
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        gcc \
+        python3-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set work directory
 WORKDIR /app
 
-# install deps
+# Install Python dependencies
 COPY requirements.txt ./requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
-# copy project files
+# Copy project files
 COPY . /app
 
-# collect static
-ENV PYTHONUNBUFFERED=1
-RUN python manage.py collectstatic --noinput || true
+# Collect static files
+RUN python manage.py collectstatic --noinput
 
-# run migrations on container start (optional: in render use release commands instead)
-# CMD python manage.py migrate && gunicorn pos_backend.wsgi:application --bind 0.0.0.0:8000
-CMD gunicorn pos_backend.wsgi:application --bind 0.0.0.0:8000 --workers 3
+# Run migrations and start server
+CMD python manage.py migrate && \
+    gunicorn pos_backend.wsgi:application --bind 0.0.0.0:$PORT --workers 2 --threads 2 --timeout 60 --access-logfile - --error-logfile - --log-level debug
