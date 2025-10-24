@@ -95,11 +95,30 @@ if 'corsheaders' not in INSTALLED_APPS:
     INSTALLED_APPS.append('corsheaders')
 if 'corsheaders.middleware.CorsMiddleware' not in MIDDLEWARE:
     MIDDLEWARE.insert(0, 'corsheaders.middleware.CorsMiddleware')
+
+# CORS configuration
+# 1) Allow explicit origins via env var CORS_ALLOWED_ORIGINS
+# 2) If not provided, default to allowing common local dev origins
+# 3) In DEBUG, allow all origins to simplify local/mobile testing
+# 4) You can force allow-all by setting CORS_ALLOW_ALL_ORIGINS=True in env
 CORS_ALLOWED_ORIGINS = os.getenv('CORS_ALLOWED_ORIGINS', '')
 if CORS_ALLOWED_ORIGINS:
     CORS_ALLOWED_ORIGINS = [u.strip() for u in CORS_ALLOWED_ORIGINS.split(',')]
 else:
-    CORS_ALLOWED_ORIGINS = []
+    CORS_ALLOWED_ORIGINS = [
+        'http://localhost:3000',
+        'http://localhost:3001',
+        'http://127.0.0.1:3000',
+        'http://127.0.0.1:3001',
+    ]
+
+# Allow-all in DEBUG for easier LAN/mobile access (safe because DEBUG=True only in dev)
+if DEBUG:
+    CORS_ALLOW_ALL_ORIGINS = True
+else:
+    # For production or when DEBUG=False, allow forcing allow-all via env (use carefully)
+    if os.getenv('CORS_ALLOW_ALL_ORIGINS', '').lower() in ('1','true','yes'):
+        CORS_ALLOW_ALL_ORIGINS = True
 
 # Security recommended settings
 SECURE_SSL_REDIRECT = os.getenv('SECURE_SSL_REDIRECT', 'False') == 'True'

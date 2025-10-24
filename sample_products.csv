@@ -1,0 +1,11 @@
+sku,name,cost_price,list_price,qty
+COFFEE001,Premium Coffee,2.50,5.00,100
+TEA001,Green Tea,1.50,3.00,75
+SNACK001,Chocolate Bar,1.00,2.50,200
+WATER001,Bottled Water,0.50,1.50,300
+SANDWICH001,Ham Sandwich,3.00,7.50,50
+SODA001,Cola,0.75,2.00,150
+CAKE001,Chocolate Cake Slice,2.00,6.00,25
+JUICE001,Orange Juice,1.25,3.50,80
+PASTRY001,Croissant,1.20,4.00,40
+CHIPS001,Potato Chips,0.80,2.25,120
